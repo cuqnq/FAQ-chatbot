@@ -1,0 +1,12 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+
+# Environment variables / secrets
+.env
+
+# Dependencies (if you add any later)
+node_modules/

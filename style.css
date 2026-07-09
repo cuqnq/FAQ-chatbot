@@ -1,0 +1,19 @@
+#chat-window { 
+    width: 350px; border: 1px solid #ccc; border-radius: 8px; 
+}
+
+#messages { 
+    height: 400px; overflow-y: auto; padding: 10px; 
+}
+
+.user-msg { 
+    text-align: right; background: #DCF8C6; 
+}
+
+.bot-msg { 
+    text-align: left; background: #F1F0F0; 
+}
+
+.hidden {
+    display: none;
+}
