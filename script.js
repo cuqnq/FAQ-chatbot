@@ -1,25 +1,16 @@
-const faq = [
-  { 
-    label: "Hours", 
-    keywords: ["hours", "open", "close"], 
-    response: "We're open Monday-Friday, 9am-5pm." 
-  },
+let faq = [];
 
-  { 
-    label: "Volunteering", 
-    keywords: ["volunteer", "sign up"], 
-    response: "You can sign up to volunteer at our website or call us." 
-  },
+async function loadFaq() {
+  const response = await fetch("faq.json");
+  faq = await response.json();
+  renderQuickReplies(); // only call this after faq is actually loaded
+}
 
-  { label: "Donations", 
-    keywords: ["donate", "donation"], 
-    response: "You can donate online or mail a check to our office." 
-  }
-];
+loadFaq();
 
 
-//Bot premade response
-function getBotResponse(input) {
+// Rule-based response (used only for quick-reply buttons — instant, no API call)
+function getRuleBasedResponse(input) {
   const lowerInput = input.toLowerCase();
   for (const item of faq) {
     if (item.keywords.some(keyword => lowerInput.includes(keyword))) {
@@ -29,23 +20,35 @@ function getBotResponse(input) {
   return "I'm not sure about that — try asking about our hours, volunteering, or donations.";
 }
 
+// AI-powered response (used for typed input — calls your backend, which calls Claude)
+async function getAIResponse(input) {
+  const response = await fetch("http://localhost:3000/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: input })
+  });
+
+  const data = await response.json();
+  return data.reply;
+}
+
+
 function botSpeaks() {
   const input = document.getElementById("user-input").value;
   if (!input) return;
-  handleUserMessage(input);
+  handleUserMessage(input, true); // true = use AI path
   document.getElementById("user-input").value = "";
 }
 
 
-//Depends on the user's preference to send an input
+//User wants to click the Send button.
 document.getElementById("send-btn").addEventListener("click", botSpeaks);
-
+//User wants to press "Enter" on keyboard.
 document.getElementById("user-input").addEventListener("keydown", function(event) {
-  if (event.key === 'Enter'){
+  if (event.key === 'Enter') {
     botSpeaks();
   }
 });
-
 
 function addMessage(text, className) {
   const msg = document.createElement("div");
@@ -55,19 +58,17 @@ function addMessage(text, className) {
   return msg;
 }
 
-function handleUserMessage(text) {
-  addMessage(text, "user-msg"); // Original text
-  const response = getBotResponse(text); // Generated message
+// `useAI` decides which response path to take
+async function handleUserMessage(text, useAI) {
+  addMessage(text, "user-msg");
   const placeholderMsg = addMessage("Thinking...", "bot-msg thinking");
 
-  setTimeout(() => {
-    placeholderMsg.textContent = response;
-  }, 2000);
+  const response = useAI ? await getAIResponse(text) : getRuleBasedResponse(text);
+
+  placeholderMsg.textContent = response;
 }
 
-
-
-// Quick-Reply feature
+// Quick-Reply feature — instant, rule-based, no API call
 function renderQuickReplies() {
   const container = document.getElementById("quick-reply-menu");
 
@@ -75,7 +76,7 @@ function renderQuickReplies() {
     const btn = document.createElement("button");
     btn.textContent = item.label;
     btn.addEventListener("click", () => {
-      handleUserMessage(item.label);
+      handleUserMessage(item.label, false); // false = use rule-based path
       document.getElementById("quick-reply-menu").classList.add("hidden");
     });
     container.appendChild(btn);
@@ -86,6 +87,3 @@ function renderQuickReplies() {
 document.getElementById("quick-reply-dropdown").addEventListener("click", () => {
   document.getElementById("quick-reply-menu").classList.toggle("hidden");
 });
-
-// Build the quick-reply buttons once on load
-renderQuickReplies();

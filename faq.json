@@ -1,0 +1,5 @@
+[
+  { "label": "Hours", "keywords": ["hours", "open", "close"], "response": "We're open Monday-Friday, 9am-5pm." },
+  { "label": "Volunteering", "keywords": ["volunteer", "sign up"], "response": "You can sign up to volunteer at our website or call us." },
+  { "label": "Donations", "keywords": ["donate", "donation"], "response": "You can donate online or mail a check to our office." }
+]
