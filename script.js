@@ -22,7 +22,7 @@ function getRuleBasedResponse(input) {
 
 // AI-powered response (used for typed input — calls your backend, which calls Claude)
 async function getAIResponse(input) {
-  const response = await fetch("http://localhost:3000/api/chat", {
+  const response = await fetch("https://faq-chatbot-production-a59f.up.railway.app/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: input })
