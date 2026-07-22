@@ -64,8 +64,8 @@ async function handleUserMessage(text, useAI) {
   const placeholderMsg = addMessage("Thinking...", "bot-msg thinking");
 
   const response = useAI ? await getAIResponse(text) : getRuleBasedResponse(text);
-
-  placeholderMsg.textContent = response;
+  streamText(placeholderMsg, response);
+  //placeholderMsg.textContent = response;
 }
 
 // Quick-Reply feature — instant, rule-based, no API call
