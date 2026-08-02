@@ -7,10 +7,12 @@
     --primary-hover: #9E0F19;  /* send button hover */
     --secondary:     #669BBC;  /* bot bubble accents, links */
     --accent:        #780000;  /* used sparingly - focus ring, badges */
-    --border:        #E8E8E6;  /* neutral divider, not part of palette */
-    --user-bubble:   #669BBC33; /* secondary at low opacity, for user message bg */
-    --bot-bubble:    #F1F0F0;   /* neutral gray, keeps bot messages calm */
+    --border:        #E8E8E6;  /* neutral divider*/
+    --user-bubble:   #669BBC33; /* user message bg */
+    --bot-bubble:    #F1F0F0;   
 }
+
+
 
 body {
     display: flex;
