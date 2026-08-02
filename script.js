@@ -38,6 +38,7 @@ function botSpeaks() {
   if (!input) return;
   handleUserMessage(input, true); // true = use AI path
   document.getElementById("user-input").value = "";
+  document.getElementById("user-input").style.height = "auto";
 }
 
 
@@ -45,9 +46,17 @@ function botSpeaks() {
 document.getElementById("send-btn").addEventListener("click", botSpeaks);
 //User wants to press "Enter" on keyboard.
 document.getElementById("user-input").addEventListener("keydown", function(event) {
-  if (event.key === 'Enter') {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
     botSpeaks();
   }
+});
+
+// Auto-grow the textarea as the user types (up to max-height set in CSS)
+const userInput = document.getElementById("user-input");
+userInput.addEventListener("input", () => {
+  userInput.style.height = "auto";
+  userInput.style.height = userInput.scrollHeight + "px";
 });
 
 function addMessage(text, className) {
